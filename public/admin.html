@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Panel Admin — Kost Pondok Ashoka</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--cream:#f6f1e6;--white:#fdfbf6;--ink:#1b2a20;--ink-soft:#54635a;--green:#22382b;
+    --accent:#d4651f;--accent-deep:#b4521a;--line:rgba(27,42,32,.16);
+    --serif:"Fraunces",Georgia,serif;--sans:"Plus Jakarta Sans",sans-serif}
+  body{font-family:var(--sans);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 24px 80px}
+  header{display:flex;justify-content:space-between;align-items:center;padding-bottom:22px;border-bottom:1px solid var(--line);margin-bottom:28px;flex-wrap:wrap;gap:12px}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:1.15rem}
+  .logo em{color:var(--accent);font-style:italic}
+  .mark{width:36px;height:36px;border-radius:50%;background:var(--green);display:grid;place-items:center;color:#e29a55}
+  .mark .lucide{width:17px;height:17px}
+  header nav{display:flex;gap:10px;align-items:center;font-size:.88rem;font-weight:600}
+  h1{font-family:var(--serif);font-size:2rem;font-weight:550;margin-bottom:4px}
+  .sub{color:var(--ink-soft);font-size:.92rem;margin-bottom:26px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:26px;margin-bottom:22px}
+  .card h2{font-family:var(--serif);font-size:1.25rem;font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .card h2 .lucide{width:18px;height:18px;color:var(--accent)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:10px}
+  input,select{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:inherit;font-size:.9rem;width:100%}
+  input:focus,select:focus{outline:none;border-color:var(--accent)}
+  .btn{background:var(--green);color:#f6f1e6;padding:11px 20px;border-radius:999px;font-weight:700;font-size:.9rem;border:0;cursor:pointer;transition:.25s;white-space:nowrap}
+  .btn:hover{background:var(--accent);color:#fff}
+  .msg{font-size:.85rem;font-weight:600;margin-top:12px;min-height:1em}
+  .msg.ok{color:#2c6e3f}.msg.err{color:var(--accent-deep)}
+  .tbl-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:680px}
+  th{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+  td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  td.act{white-space:nowrap}
+  .pill{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px}
+  .pill.on{background:rgba(61,138,78,.13);color:#2c6e3f}
+  .pill.off{background:rgba(212,101,31,.13);color:var(--accent)}
+  .act button,.rv-act button{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;transition:.2s;margin-right:6px;font-family:inherit}
+  .act button:hover,.rv-act button:hover{border-color:var(--accent);color:var(--accent)}
+  .rv-act button.danger:hover{color:#b4302f;border-color:rgba(180,48,47,.4)}
+  .rv{border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;background:var(--cream)}
+  .rv.off{opacity:.55;border-style:dashed}
+  .rv-top{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;flex-wrap:wrap}
+  .rv-top b{font-size:.9rem}
+  .rv p{font-size:.92rem;margin:8px 0 12px;color:var(--ink-soft)}
+  .rv-act{display:flex}
+  .empty{color:var(--ink-soft);font-size:.9rem}
+  @media(max-width:760px){.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="/"><span class="mark"><i data-lucide="leaf"></i></span>Pondok <em>Ashoka</em> — Admin</a>
+    <nav><a href="/">← Beranda</a><button class="btn" id="btnLogout" style="padding:8px 16px;font-size:.8rem">Keluar</button></nav>
+  </header>
+
+  <h1>Panel Admin</h1>
+  <p class="sub">Buat akun penghuni, kelola akses, dan moderasi ulasan yang tampil di halaman depan.</p>
+
+  <section class="card">
+    <h2><i data-lucide="user-plus"></i> Buat Akun Penghuni</h2>
+    <form id="formUser" class="grid">
+      <input id="uKamar" placeholder="Nomor kamar, cth. A01" required>
+      <input id="uNama"  placeholder="Nama lengkap" required>
+      <select id="uTipe">
+        <option value="">Tipe kamar (opsional)</option>
+        <option>Standard</option>
+      </select>
+      <input id="uPass" placeholder="Sandi awal (min. 6)" required>
+      <button class="btn" type="submit">Buat Akun</button>
+    </form>
+    <p class="msg" id="uMsg"></p>
+  </section>
+
+  <section class="card">
+    <h2><i data-lucide="users"></i> Daftar Akun</h2>
+    <div class="tbl-wrap"><table id="tblUsers">
+      <thead><tr><th>Kamar</th><th>Nama</th><th>Tipe</th><th>Role</th><th>Review</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2><i data-lucide="message-square-quote"></i> Moderasi Ulasan</h2>
+    <div id="listReviews"></div>
+  </section>
+</div>
+
+<script>
+/* ---------- Guard: wajib admin, selain itu tendang ke login ---------- */
+(async ()=>{
+  try{
+    const d = await (await fetch('/api/me')).json();
+    if (d.ok && d.user?.role === 'admin') boot();
+    else location.href = '/login.html';
+  }catch{ location.href = '/login.html'; }
+})();
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function boot(){
+  lucide.createIcons();
+  loadUsers(); loadReviews();
+
+  document.getElementById('formUser').addEventListener('submit', async e=>{
+    e.preventDefault();
+    const d = await (await fetch('/api/admin/users', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        nomor_kamar: uKamar.value, nama: uNama.value,
+        tipe_kamar: uTipe.value,   password: uPass.value })
+    })).json();
+    const m = document.getElementById('uMsg');
+    m.textContent = d.msg; m.className = 'msg ' + (d.ok ? 'ok' : 'err');
+    if (d.ok){ e.target.reset(); loadUsers(); }
+  });
+
+  document.getElementById('btnLogout').addEventListener('click', async ()=>{
+    await fetch('/api/logout', {method:'POST'}); location.href = '/login.html';
+  });
+}
+
+/* ---------- Daftar akun ---------- */
+async function loadUsers(){
+  const d  = await (await fetch('/api/admin/users')).json();
+  const tb = document.querySelector('#tblUsers tbody');
+  tb.innerHTML = d.users.map(u=>`
+    <tr>
+      <td><b>${esc(u.nomor_kamar)}</b></td><td>${esc(u.nama)}</td>
+      <td>${esc(u.tipe_kamar || '—')}</td><td>${u.role}</td><td>${u.jml_review}</td>
+      <td><span class="pill ${u.is_active ? 'on' : 'off'}">${u.is_active ? 'Aktif' : 'Nonaktif'}</span></td>
+      <td class="act">${u.role === 'penghuni' ? `
+        <button data-act="toggle" data-id="${u.id}" data-v="${u.is_active ? 0 : 1}">${u.is_active ? 'Nonaktifkan' : 'Aktifkan'}</button>
+        <button data-act="reset"  data-id="${u.id}">Reset sandi</button>` : ''}</td>
+    </tr>`).join('');
+
+  tb.onclick = async e=>{
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.act === 'toggle'){
+      await fetch(`/api/admin/users/${b.dataset.id}/active`, {
+        method:'PATCH', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ active: b.dataset.v === '1' })});
+      loadUsers();
+    }
+    if (b.dataset.act === 'reset'){
+      const pw = prompt('Sandi baru (min. 6 karakter):'); if (!pw) return;
+      const d = await (await fetch(`/api/admin/users/${b.dataset.id}/password`, {
+        method:'PATCH', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ password: pw })})).json();
+      alert(d.msg || 'Selesai');
+    }
+  };
+}
+
+/* ---------- Moderasi ulasan ---------- */
+async function loadReviews(){
+  const d   = await (await fetch('/api/admin/reviews')).json();
+  const box = document.getElementById('listReviews');
+  box.innerHTML = d.reviews.length ? d.reviews.map(r=>`
+    <div class="rv ${r.is_published ? '' : 'off'}">
+      <div class="rv-top">
+        <b>${esc(r.nama)} · Kamar ${esc(r.nomor_kamar)}</b>
+        <span>${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)} — ${new Date(r.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</span>
+      </div>
+      <p>${esc(r.isi)}</p>
+      <div class="rv-act">
+        <button data-act="pub" data-id="${r.id}" data-v="${r.is_published ? 0 : 1}">${r.is_published ? 'Sembunyikan' : 'Tayangkan'}</button>
+        <button data-act="del" data-id="${r.id}" class="danger">Hapus</button>
+      </div>
+    </div>`).join('') : '<p class="empty">Belum ada ulasan.</p>';
+
+  box.onclick = async e=>{
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.act === 'pub'){
+      await fetch(`/api/admin/reviews/${b.dataset.id}/publish`, {
+        method:'PATCH', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ published: b.dataset.v === '1' })});
+      loadReviews();
+    }
+    if (b.dataset.act === 'del' && confirm('Hapus ulasan ini?')){
+      await fetch(`/api/admin/reviews/${b.dataset.id}`, {method:'DELETE'});
+      loadReviews();
+    }
+  };
+}
+</script>
+</body>
+</html>
