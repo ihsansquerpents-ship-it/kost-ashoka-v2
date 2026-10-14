@@ -248,4 +248,13 @@ app.delete('/api/admin/reviews/:id', requireAdmin, async (req,res)=>{
 
 /* ---------- Start ---------- */
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, ()=> console.log(`✅ Pondok Ashoka berjalan di http://localhost:${PORT}`));
+
+// Hanya jalankan app.listen jika dijalankan secara lokal (bukan di Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server berjalan di port ${PORT}`);
+  });
+}
+
+// Wajib diekspor agar bisa dibaca oleh Vercel
+module.exports = app;
