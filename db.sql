@@ -1,9 +1,3 @@
--- Jalankan: mysql -u root -p < db.sql
-CREATE DATABASE IF NOT EXISTS kost_ashoka
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE kost_ashoka;
-
--- ============ TABEL USERS (akun penghuni & admin) ============
 CREATE TABLE users (
   id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nomor_kamar   VARCHAR(10)  NOT NULL UNIQUE,        -- dipakai sebagai "username"

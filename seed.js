@@ -1,15 +1,12 @@
 /* Jalankan SEKALI: node seed.js */
 require('dotenv').config();
-const mysql  = require('mysql2/promise');
+const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 
-(async ()=>{
-  const db = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'kost_ashoka'
-  });
+(async () => {
+  const db = await mysql.createConnection(
+    process.env.DATABASE_URL || 'mysql://avnadmin:AVNS_8XnsZ5HCCE0Go9nej_Q@mysql-bbc3332-ihsansquerpents-b7f4.a.aivencloud.com:21620/defaultdb?ssl-mode=REQUIRED'
+  );
   const hash = pw => bcrypt.hash(pw, 12);
 
   // Akun admin — ⚠️ SEGERA GANTI sandi setelah login pertama
@@ -17,7 +14,8 @@ const bcrypt = require('bcryptjs');
     `INSERT INTO users (nomor_kamar,nama,password_hash,role)
      VALUES ('ADMIN','Pengelola Pondok Ashoka',?,'admin')
      ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash)`,
-    [await hash('admin123')]);
+    [await hash('admin123')]
+  );
 
   // 2 akun + ulasan contoh (sesuai testimoni yang sudah ada di landing page)
   await db.query(`INSERT INTO users (nomor_kamar,nama,password_hash,tipe_kamar)
