@@ -1,36 +1,36 @@
-/* Jalankan SEKALI: node seed.js */
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcryptjs');
 
 (async () => {
-  const db = await mysql.createConnection(
+  const connection = await mysql.createConnection(
     process.env.DATABASE_URL || 'mysql://avnadmin:AVNS_8XnsZ5HCCE0Go9nej_Q@mysql-bbc3332-ihsansquerpents-b7f4.a.aivencloud.com:21620/defaultdb?ssl-mode=REQUIRED'
   );
-  const hash = pw => bcrypt.hash(pw, 12);
 
-  // Akun admin — ⚠️ SEGERA GANTI sandi setelah login pertama
-  await db.query(
-    `INSERT INTO users (nomor_kamar,nama,password_hash,role)
-     VALUES ('ADMIN','Pengelola Pondok Ashoka',?,'admin')
-     ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash)`,
-    [await hash('admin123')]
-  );
+  const adminHash = await bcrypt.hash('admin123', 12);
+  const userHash = await bcrypt.hash('rani123', 12);
+  const bimaHash = await bcrypt.hash('bima123', 12);
 
-  // 2 akun + ulasan contoh (sesuai testimoni yang sudah ada di landing page)
-  await db.query(`INSERT INTO users (nomor_kamar,nama,password_hash,tipe_kamar)
-    VALUES ('D01','Rani Wulandari',?,'Deluxe')`, [await hash('rani123')]);
-  await db.query(`INSERT INTO users (nomor_kamar,nama,password_hash,tipe_kamar)
-    VALUES ('S02','Bima Prasetya',?,'Superior')`, [await hash('bima123')]);
+  // Masukkan Admin
+  await connection.query(`
+    INSERT INTO users (nomor_kamar, nama, password_hash, role) 
+    VALUES ('ADMIN', 'Pengelola Utama', ?, 'admin')
+    ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), role=VALUES(role);
+  `, [adminHash]);
 
-  await db.query(`INSERT INTO reviews (user_id,rating,isi)
-    SELECT id,5,'Dua tahun tinggal di sini dan rasanya seperti rumah sendiri. Pengelola ramah, dapur selalu bersih, dan taman depannya bikin betah pulang lebih sore.'
-    FROM users WHERE nomor_kamar='D01'`);
-  await db.query(`INSERT INTO reviews (user_id,rating,isi)
-    SELECT id,5,'Awalnya cari yang paling murah, ternyata ambil Superior — sewa 6 bulan dapat diskon 10%, jadi jauh lebih masuk akal daripada kos lain.'
-    FROM users WHERE nomor_kamar='S02'`);
+  // Masukkan Penghuni Contoh
+  await connection.query(`
+    INSERT INTO users (nomor_kamar, nama, password_hash, tipe_kamar, role) 
+    VALUES ('D01', 'Rani Wulandari', ?, 'Deluxe', 'penghuni')
+    ON DUPLICATE KEY UPDATE nama=VALUES(nama), password_hash=VALUES(password_hash), tipe_kamar=VALUES(tipe_kamar);
+  `, [userHash]);
 
-  console.log('✔ Admin: kamar ADMIN / sandi admin123  (segera ganti!)');
-  console.log('✔ Contoh penghuni: D01/rani123, S02/bima123');
+  await connection.query(`
+    INSERT INTO users (nomor_kamar, nama, password_hash, tipe_kamar, role) 
+    VALUES ('S02', 'Bima Arya', ?, 'Standard', 'penghuni')
+    ON DUPLICATE KEY UPDATE nama=VALUES(nama), password_hash=VALUES(password_hash), tipe_kamar=VALUES(tipe_kamar);
+  `, [bimaHash]);
+
+  console.log('✔ Data akun berhasil dimasukkan/diperbarui!');
   process.exit();
 })();

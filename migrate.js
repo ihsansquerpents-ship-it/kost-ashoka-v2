@@ -12,9 +12,18 @@ const fs = require('fs');
 
   for (let statement of statements) {
     if (statement.toUpperCase().startsWith('CREATE DATABASE') || statement.toUpperCase().startsWith('USE')) continue;
-    await connection.query(statement);
+    try {
+      // Tambahkan IF NOT EXISTS secara otomatis pada query CREATE TABLE
+      let modified = statement;
+      if (statement.toUpperCase().startsWith('CREATE TABLE')) {
+        modified = statement.replace(/CREATE TABLE\s+/i, 'CREATE TABLE IF NOT EXISTS ');
+      }
+      await connection.query(modified);
+    } catch (err) {
+      console.log('Catatan:', err.sqlMessage);
+    }
   }
 
-  console.log('✔ Semua tabel berhasil dibuat di database Aiven!');
+  console.log('✔ Migrasi tabel selesai!');
   process.exit();
 })();

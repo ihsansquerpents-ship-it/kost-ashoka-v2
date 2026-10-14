@@ -24,3 +24,9 @@ CREATE TABLE reviews (
   CONSTRAINT chk_rating CHECK (rating BETWEEN 1 AND 5),
   UNIQUE KEY uq_one_review_per_user (user_id)        -- 1 penghuni = 1 ulasan (bisa diedit)
 );
+
+CREATE TABLE IF NOT EXISTS sessions (
+  session_id varchar(128) COLLATE utf8mb4_bin NOT NULL PRIMARY KEY,
+  expires int(11) unsigned NOT NULL,
+  data mediumtext COLLATE utf8mb4_bin
+);
