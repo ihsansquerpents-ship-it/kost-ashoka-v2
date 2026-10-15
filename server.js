@@ -1,6 +1,5 @@
 /* ============================================================
-   server.js — Backend Kost Pondok Ashoka
-   Fitur: login penghuni, sesi, ulasan, panel admin
+   server.js — Backend Kost Pondok Ashoka (Fixed for Vercel)
    ============================================================ */
 require('dotenv').config();
 const path      = require('path');
@@ -15,9 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));   // index/login/admin.html
 
+// URL Database (Mengutamakan environment variable Vercel/Production)
+const DB_URI = process.env.DATABASE_URL || 'mysql://root:@localhost:3306/kost_ashoka';
+
 /* ---------- Pool koneksi MySQL ---------- */
 const pool = mysql.createPool({
-  uri: process.env.DATABASE_URL,
+  uri: DB_URI,
   waitForConnections: true,
   connectionLimit: 10,
   ssl: {
@@ -25,22 +27,20 @@ const pool = mysql.createPool({
   }
 });
 
-/* ---------- Sesi disimpan di MySQL (tetap valid walau server restart) ---------- */
+/* ---------- Sesi disimpan di MySQL (Mendukung Cloud Database URI) ---------- */
 app.use(session({
   name: 'ashoka_sid',
-  secret: 'super-elit-secret-085220',
+  secret: process.env.SESSION_SECRET || 'super-elit-secret-085220',
   resave: false,
   saveUninitialized: false,
   store: new MySQLStore({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'kost_ashoka'
+    uri: DB_URI,
+    ssl: { rejectUnauthorized: false }
   }),
   cookie: {
     httpOnly: true,            // cookie tak terbaca JavaScript → anti-XSS
     sameSite: 'lax',
-    secure: false,             // ⚠️ ubah ke true saat sudah pakai HTTPS
+    secure: process.env.NODE_ENV === 'production', // Otomatis true di Vercel (HTTPS)
     maxAge: 1000*60*60*24*7    // 7 hari
   }
 }));
@@ -79,7 +79,6 @@ app.post('/api/login', loginLimiter, async (req,res)=>{
       'SELECT * FROM users WHERE nomor_kamar=?', [nomor_kamar.trim().toUpperCase()]);
     const user = rows[0];
 
-    // Bandingkan hash tetap dilakukan walau user tak ada (anti timing-attack)
     const hash  = user ? user.password_hash
       : '$2a$10$C6UzMDM.H6dfI/f/IKcEeO7VTgxjrpU8k95Lxvtqk1PGCvXnLBDF6';
     const match = await bcrypt.compare(password, hash);
@@ -89,7 +88,6 @@ app.post('/api/login', loginLimiter, async (req,res)=>{
     if (!user.is_active)
       return res.status(403).json({ok:false,msg:'Akun dinonaktifkan. Hubungi pengelola.'});
 
-    // Regenerasi sesi → cegah session fixation
     req.session.regenerate(err=>{
       if (err) return res.status(500).json({ok:false,msg:'Gagal membuat sesi.'});
       req.session.userId = user.id;
@@ -103,7 +101,6 @@ app.post('/api/login', loginLimiter, async (req,res)=>{
   }catch(e){ console.error(e); res.status(500).json({ok:false,msg:'Terjadi kesalahan server.'}); }
 });
 
-/* Status login — dipanggil frontend saat halaman dibuka */
 app.get('/api/me', async (req,res)=>{
   try{
     const user = await currentUser(req);
@@ -118,7 +115,6 @@ app.post('/api/logout', (req,res)=>{
 /* ============================================================
    2) ULASAN / TESTIMONI
    ============================================================ */
-/* Publik — untuk halaman depan */
 app.get('/api/reviews', async (req,res)=>{
   try{
     const [rows] = await pool.query(`
@@ -130,11 +126,6 @@ app.get('/api/reviews', async (req,res)=>{
   }catch(e){ console.error(e); res.status(500).json({ok:false, reviews:[]}); }
 });
 
-/* ============================================================
-   STATISTIK RATING — untuk angka "Rating penyewa" di hero
-   Rata-rata & jumlah ulasan yang TAYANG saja (is_published=1),
-   sehingga ulasan yang disembunyikan admin tidak ikut dihitung.
-   ============================================================ */
 app.get('/api/stats', async (req,res)=>{
   try{
     const [[row]] = await pool.query(`
@@ -152,14 +143,12 @@ app.get('/api/stats', async (req,res)=>{
   }
 });
 
-/* Ulasan milik penghuni sendiri — untuk prefill form edit */
 app.get('/api/my-review', requireAuth, async (req,res)=>{
   const [rows] = await pool.query(
     'SELECT rating, isi FROM reviews WHERE user_id=?', [req.session.userId]);
   res.json({ok:true, review: rows[0] || null});
 });
 
-/* Kirim / perbarui ulasan (1 penghuni = 1 ulasan, upsert) */
 app.post('/api/reviews', requireAuth, async (req,res)=>{
   try{
     const rating = parseInt(req.body?.rating, 10);
@@ -188,7 +177,6 @@ app.get('/api/admin/users', requireAdmin, async (req,res)=>{
   res.json({ok:true, users});
 });
 
-/* SATU-SATUNYA cara akun tercipta */
 app.post('/api/admin/users', requireAdmin, async (req,res)=>{
   try{
     const { nomor_kamar='', nama='', password='', tipe_kamar=null } = req.body || {};
@@ -209,14 +197,12 @@ app.post('/api/admin/users', requireAdmin, async (req,res)=>{
   }
 });
 
-/* Aktifkan / nonaktifkan akun penghuni */
 app.patch('/api/admin/users/:id/active', requireAdmin, async (req,res)=>{
   await pool.query('UPDATE users SET is_active=? WHERE id=? AND role="penghuni"',
     [req.body?.active ? 1 : 0, req.params.id]);
   res.json({ok:true});
 });
 
-/* Reset sandi penghuni */
 app.patch('/api/admin/users/:id/password', requireAdmin, async (req,res)=>{
   const pw = req.body?.password || '';
   if (pw.length < 6) return res.status(400).json({ok:false,msg:'Sandi minimal 6 karakter.'});
@@ -226,7 +212,6 @@ app.patch('/api/admin/users/:id/password', requireAdmin, async (req,res)=>{
   res.json({ok:true, msg:'Sandi diperbarui.'});
 });
 
-/* Moderasi ulasan */
 app.get('/api/admin/reviews', requireAdmin, async (req,res)=>{
   const [reviews] = await pool.query(`
     SELECT r.*, u.nama, u.nomor_kamar
@@ -246,15 +231,12 @@ app.delete('/api/admin/reviews/:id', requireAdmin, async (req,res)=>{
   res.json({ok:true});
 });
 
-/* ---------- Start ---------- */
 const PORT = process.env.PORT || 3000;
 
-// Hanya jalankan app.listen jika dijalankan secara lokal (bukan di Vercel)
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`Server berjalan di port ${PORT}`);
   });
 }
 
-// Wajib diekspor agar bisa dibaca oleh Vercel
 module.exports = app;
