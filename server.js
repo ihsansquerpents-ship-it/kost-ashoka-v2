@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));   // index/login/admin.html
 
 // URL Database (Mengutamakan environment variable Vercel/Production)
-const DB_URI = process.env.DATABASE_URL || 'mysql://root:@localhost:3306/kost_ashoka';
+const dbUrl = new URL(process.env.DATABASE_URL || 'mysql://root:@localhost:3306/kost_ashoka');
 
 /* ---------- Pool koneksi MySQL ---------- */
 const pool = mysql.createPool({
@@ -34,14 +34,20 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new MySQLStore({
-    uri: DB_URI,
-    ssl: { rejectUnauthorized: false }
+    host: dbUrl.hostname,
+    port: dbUrl.port || 3306,
+    user: dbUrl.username,
+    password: dbUrl.password,
+    database: dbUrl.pathname.replace('/', ''),
+    ssl: { rejectUnauthorized: false },
+    clearExpired: true,
+    checkExpirationInterval: 900000
   }),
   cookie: {
-    httpOnly: true,            // cookie tak terbaca JavaScript → anti-XSS
+    httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production', // Otomatis true di Vercel (HTTPS)
-    maxAge: 1000*60*60*24*7    // 7 hari
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000*60*60*24*7
   }
 }));
 
