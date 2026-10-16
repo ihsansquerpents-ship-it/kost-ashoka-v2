@@ -383,6 +383,28 @@
 #statRating{display:inline-block}
 #statRating.pop{animation:statPop .55s cubic-bezier(.22,.61,.36,1)}
 @keyframes statPop{0%{transform:scale(1)}40%{transform:scale(1.22)}100%{transform:scale(1)}}
+
+/* ============ TAMBAHAN: Anggota Siswa (Bingkai Foto) ============ */
+.stu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:24px}
+.stu-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,border-color .45s}
+.stu-card:hover{transform:translateY(-8px);border-color:rgba(212,101,31,.5);box-shadow:0 26px 48px -24px rgba(27,42,32,.38)}
+.stu-photo{position:relative;aspect-ratio:3/4;overflow:hidden;margin:0}
+.stu-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,filter .5s ease,transform .9s cubic-bezier(.22,.61,.36,1)}
+.stu-photo .pf{opacity:1;filter:grayscale(100%) contrast(1.1);z-index:1}
+.stu-photo .pb{opacity:0;z-index:2}
+.stu-card:hover .pf{opacity:0}
+.stu-card:hover .pb{opacity:1}
+.stu-card:hover .stu-photo img{transform:scale(1.06)}
+.stu-no{position:absolute;top:12px;left:12px;z-index:3;font-family:var(--serif);font-style:italic;font-weight:600;font-size:.9rem;color:var(--cream);background:rgba(21,36,25,.78);backdrop-filter:blur(4px);padding:3px 11px;border-radius:999px}
+.stu-info{padding:14px 16px 18px;border-top:1px solid var(--line)}
+.stu-role{display:inline-flex;align-items:center;gap:7px;font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.stu-role::before{content:"";width:14px;height:1.5px;background:currentColor;opacity:.8}
+.stu-name{font-family:var(--serif);font-size:1.12rem;font-weight:600;line-height:1.2;margin-top:5px}
+@media(max-width:600px){
+  .stu-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .stu-info{padding:12px 13px 15px}
+  .stu-name{font-size:1rem}
+}
 </style>
 </head>
 <body>
@@ -662,6 +684,177 @@
         <a href="https://www.google.com/maps/dir/?api=1&destination=Kost+Pondok+Ashoka,+Jl.+Pd.+Hijau+No.40,+Jl.+Permai+V,+Cipadung,+Cibiru,+Bandung+City,+West+Java+40614" target="_blank" rel="noopener">Petunjuk Arah ↗</a>
     </div>
 </div>
+  </div>
+</section>
+
+<!-- ============ ANGGOTA SISWA — 12 BINGKAI FOTO ============ -->
+<section class="sec" id="anggota">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Anggota Kelompok</span>
+      <h2>Anggota <em>kelompok</em> kami.</h2>
+      <p class="lead">Arahkan kursor ke foto untuk melihat sisi lainnya — hitam putih berubah menjadi berwarna.</p>
+    </div>
+
+    <div class="stu-grid">
+
+      <!-- 01 · Mentor  -->
+      <article class="stu-card reveal">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="" alt="Hiro Faletehan — foto depan">
+          <img class="pb" loading="lazy" src="" alt="Hiro Faletehan — foto belakang">
+          <span class="stu-no">01</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role">Mentor</span>
+          <h3 class="stu-name">Hiro Faletehan</h3>
+        </div>
+      </article>
+
+      <!-- 02 · Wakil Kelas -->
+      <article class="stu-card reveal" style="--d:.05s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/ZRygWKp6/Chat-GPT-Image-Sep-22-2026-06-58-39-PM.png" alt="Muhammad Irsyad Virdaus — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/sXWK4r7m/Whats-App-Image-2026-10-16-at-01-12-01.jpg" alt="Muhammad Irsyad Virdaus — foto belakang">
+          <span class="stu-no">02</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role">Ketua Kelompok</span>
+          <h3 class="stu-name">Muhammad Irsyad Virdaus</h3>
+        </div>
+      </article>
+
+      <!-- 03 · Sekretaris 1 -->
+      <article class="stu-card reveal" style="--d:.1s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/mZKLpt86/Chat-GPT-Image-Sep-22-2026-06-57-39-PM.png" alt="Yogaswara Priatama Whardhana — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/TPHMy4s9/Whats-App-Image-2026-10-15-at-23-10-40.jpg" alt="Yogaswara Priatama Whardhana — foto belakang">
+          <span class="stu-no">03</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Yogaswara Priatama Whardhana</h3>
+        </div>
+      </article>
+
+      <!-- 04 · Sekretaris 2 -->
+      <article class="stu-card reveal" style="--d:.15s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/qM4QyWRy/Whats-App-Image-2026-10-16-at-06-09-38.jpg" alt="Ashifa Julia Purnama Suryadi  — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/L87zCWHq/Whats-App-Image-2026-10-16-at-07-09-35.jpg" alt="Ashifa Julia Purnama Suryadi  — foto belakang">
+          <span class="stu-no">04</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Ashifa Julia Purnama Suryadi </h3>
+        </div>
+      </article>
+
+      <!-- 05 · Bendahara 1 -->
+      <article class="stu-card reveal" style="--d:.2s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/ZYyXwk4j/Whats-App-Image-2026-10-16-at-06-24-12.jpg" alt="Nabil Aditya Romansah  — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/CKQ6472P/Whats-App-Image-2026-10-16-at-06-27-40.jpg" alt="Nabil Aditya Romansah  — foto belakang">
+          <span class="stu-no">05</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Nabil Aditya Romansah</h3>
+        </div>
+      </article>
+
+      <!-- 06 · Bendahara 2 -->
+      <article class="stu-card reveal" style="--d:.25s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/kGG2QzMs/Whats-App-Image-2026-10-15-at-23-16-19.jpg" alt="Dhia Kamila Putri  — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/XYdpkw36/Whats-App-Image-2026-10-15-at-23-16-19-(1).jpg" alt="Dhia Kamila Putri  — foto belakang">
+          <span class="stu-no">06</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Dhia Kamila Putri </h3>
+        </div>
+      </article>
+
+      <!-- 07 · Sie Acara -->
+      <article class="stu-card reveal" style="--d:.1s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/cJtTmkCy/Chat-GPT-Image-Sep-22-2026-07-08-10-PM.png" alt="Muhammad Ihsan Auliya  — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/bJWR2x8M/Whats-App-Image-2026-10-15-at-23-39-45.jpg" alt="Muhammad Ihsan Auliya  — foto belakang">
+          <span class="stu-no">07</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Muhammad Ihsan Auliya</h3>
+        </div>
+      </article>
+
+      <!-- 08 · Sie Dokumentasi -->
+      <article class="stu-card reveal" style="--d:.15s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/yYXNJ7yM/image-(2).png" alt="Ceptiana Sopa Ramdani — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/Hk6vk7cj/Whats-App-Image-2026-10-15-at-23-54-44.jpg" alt="Ceptiana Sopa Ramdani — foto belakang">
+          <span class="stu-no">08</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Ceptiana Sopa Ramdani</h3>
+        </div>
+      </article>
+
+      <!-- 09 ·  -->
+      <article class="stu-card reveal" style="--d:.2s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/T30hsTyg/Chat-GPT-Image-Sep-22-2026-02-46-17-PM.png" alt="Muhammad Akhtar Rayyan Surya — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/3JPLW16h/Whats-App-Image-2026-10-16-at-08-53-20.jpg" alt="Muhammad Akhtar Rayyan Surya — foto belakang">
+          <span class="stu-no">09</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Muhammad Akhtar Rayyan Surya</h3>
+        </div>
+      </article>
+
+      <!-- 10 ·  -->
+      <article class="stu-card reveal" style="--d:.25s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/Y915XC02/image-(1).png" alt="Alpi Lutpian Almadani  — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/jjLMCNjJ/Whats-App-Image-2026-10-16-at-06-44-43.jpg" alt="Alpi Lutpian Almadani  — foto belakang">
+          <span class="stu-no">10</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Alpi Lutpian Almadani </h3>
+        </div>
+      </article>
+
+      <!-- 11 ·  -->
+      <article class="stu-card reveal" style="--d:.3s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/Wp0NKsCT/image-(3).png" alt="Reihan Azi Firdaus — foto depan">
+          <img class="pb" loading="lazy" src="https://i.pinimg.com/736x/4b/3f/f5/4b3ff5f086a304c1e4d2753f4eb3a2cb.jpg" alt="Reihan Azi Firdaus — foto belakang">
+          <span class="stu-no">11</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Reihan Azi Firdaus</h3>
+        </div>
+      </article>
+
+      <!-- 12 ·  -->
+      <article class="stu-card reveal" style="--d:.35s">
+        <figure class="stu-photo">
+          <img class="pf" loading="lazy" src="https://i.postimg.cc/x1ZV8Zh3/image.png" alt="Kirana Ayu — foto depan">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/QNgbMWw2/Whats-App-Image-2026-10-15-at-23-57-55.jpg" alt="Kirana Ayu — foto belakang">
+          <span class="stu-no">12</span>
+        </figure>
+        <div class="stu-info">
+          <span class="stu-role"> - </span>
+          <h3 class="stu-name">Reyhan Andrean</h3>
+        </div>
+      </article>
+
+    </div>
   </div>
 </section>
 
