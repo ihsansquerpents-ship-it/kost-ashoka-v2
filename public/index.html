@@ -388,7 +388,11 @@
 .stu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:24px}
 .stu-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,border-color .45s}
 .stu-card:hover{transform:translateY(-8px);border-color:rgba(212,101,31,.5);box-shadow:0 26px 48px -24px rgba(27,42,32,.38)}
-.stu-photo{position:relative;aspect-ratio:3/4;overflow:hidden;margin:0}
+.stu-photo{position:relative;aspect-ratio:3/4;overflow:hidden;margin:0;background:var(--cream-2)}
+.stu-photo::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
+  animation:shimmer 1.4s infinite;z-index:0}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 .stu-photo img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,filter .5s ease,transform .9s cubic-bezier(.22,.61,.36,1)}
 .stu-photo .pf{opacity:1;filter:grayscale(100%) contrast(1.1);z-index:1}
 .stu-photo .pb{opacity:0;z-index:2}
@@ -424,7 +428,35 @@
 <body>
 
 <div class="grain" aria-hidden="true"></div>
+<script>
+/* ================================================================
+   AUTO-RESIZE: semua foto i.postimg.cc dimuat ulang lewat wsrv.nl
+   → ukuran turun dari 1–5 MB menjadi ±50–150 KB per foto
+   ================================================================ */
+(function(){
+  var fix = function(u){
+    if (!u || u.indexOf('i.postimg.cc') === -1 || u.indexOf('wsrv.nl') !== -1) return null;
+    return 'https://wsrv.nl/?url=' + encodeURIComponent(u) + '&w=800&q=75&output=webp';
+  };
+  var apply = function(scope){
+    (scope || document).querySelectorAll('img').forEach(function(im){
+      var f = fix(im.getAttribute('src'));
+      if (f) im.setAttribute('src', f);
+    });
+  };
+  apply(); // foto yang sudah ada di HTML
 
+  // foto yang dibuat dinamis oleh skrip utama (panel kamar, dsb.)
+  new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      m.addedNodes.forEach(function(n){
+        if (n.tagName === 'IMG'){ var f = fix(n.getAttribute('src')); if (f) n.setAttribute('src', f); }
+        else if (n.querySelectorAll) apply(n);
+      });
+    });
+  }).observe(document.documentElement, {childList:true, subtree:true});
+})();
+</script>
 <!-- ============ HEADER ============ -->
 <header class="hd" id="hd">
   <div class="wrap">
@@ -908,17 +940,23 @@
    PONDOK ASHOKA — SKRIP UTAMA (1 TIPE KAMAR)
    ================================================================ */
 
-/* --- Handler Error Gambar Global --- */
+
+const IMG_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800">' +
+  '<rect width="100%" height="100%" fill="#eee7d7"/>' +
+  '<text x="300" y="390" text-anchor="middle" font-family="sans-serif" font-size="26" fill="#54635a">Foto tidak dapat dimuat</text>' +
+  '<text x="300" y="425" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#8a978d">Periksa koneksi internet</text>' +
+  '</svg>');
+
 document.addEventListener('error', e => {
   const t = e.target;
   if (t.tagName === 'IMG' && !t.dataset.fbk){
     t.dataset.fbk = '1';
-    t.src = 'https://placehold.co/720x900/f6f1e6/54635a?text=Foto+sementara+tidak+tersedia';
+    t.src = IMG_FALLBACK;
   }
-}, true);   // capture: menangkap error img yang dibuat dinamis pun
-
+}, true);
 /* ---------------- DATA — EDIT DI SINI ---------------- */
-const WA_NUMBER = '6285157723358';             // ← nomor WA pengelola (format 62…)
+const WA_NUMBER = '6285157723358';              // ← nomor WA pengelola (format 62…)
 const DISKON    = { 6: 0.10, 12: 0.20 };     // 6 bulan: 10%, 1 tahun: 20%
 
 const ROOM = {                                 // ← SATU-SATUNYA tipe kamar
