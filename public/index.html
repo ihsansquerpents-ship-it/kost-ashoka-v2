@@ -389,7 +389,7 @@
 .stu-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,border-color .45s}
 .stu-card:hover{transform:translateY(-8px);border-color:rgba(212,101,31,.5);box-shadow:0 26px 48px -24px rgba(27,42,32,.38)}
 .stu-photo{position:relative;aspect-ratio:3/4;overflow:hidden;margin:0}
-.stu-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,filter .5s ease,transform .9s cubic-bezier(.22,.61,.36,1)}
+.stu-photo img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,filter .5s ease,transform .9s cubic-bezier(.22,.61,.36,1)}
 .stu-photo .pf{opacity:1;filter:grayscale(100%) contrast(1.1);z-index:1}
 .stu-photo .pb{opacity:0;z-index:2}
 .stu-card:hover .pf{opacity:0}
@@ -404,6 +404,20 @@
   .stu-grid{grid-template-columns:repeat(2,1fr);gap:14px}
   .stu-info{padding:12px 13px 15px}
   .stu-name{font-size:1rem}
+}
+
+.stu-card{cursor:pointer}                                        
+.stu-card.flip .pf{opacity:0}                    
+.stu-card.flip .pb{opacity:1}                    
+@media (hover:none){
+  .stu-card:active .stu-photo img{transform:scale(1.03)} 
+}
+
+/* Fallback untuk browser tanpa dukungan aspect-ratio */
+@supports not (aspect-ratio:3/4){
+  .stu-photo::before{content:"";display:block;padding-top:133.33%}
+  .arch{height:440px}
+  .arch img{height:100%}
 }
 </style>
 </head>
@@ -687,18 +701,16 @@
   </div>
 </section>
 
-<!-- ============ ANGGOTA SISWA — 12 BINGKAI FOTO ============ -->
 <section class="sec" id="anggota">
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Anggota Kelompok</span>
       <h2>Anggota <em>kelompok</em> kami.</h2>
-      <p class="lead">Arahkan kursor ke foto untuk melihat sisi lainnya — hitam putih berubah menjadi berwarna.</p>
+     <p class="lead">Arahkan kursor — atau <strong>ketuk foto</strong> di HP — untuk melihat sisi lainnya: hitam putih berubah menjadi berwarna.</p>
     </div>
 
     <div class="stu-grid">
 
-      <!-- 01 · Mentor  -->
       <article class="stu-card reveal">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/6QNz9QPk/Whats-App-Image-2026-10-16-at-09-27-30.jpg" alt="Hiro Faletehan — foto depan">
@@ -711,7 +723,6 @@
         </div>
       </article>
 
-      <!-- 02 · Wakil Kelas -->
       <article class="stu-card reveal" style="--d:.05s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/ZRygWKp6/Chat-GPT-Image-Sep-22-2026-06-58-39-PM.png" alt="Muhammad Irsyad Virdaus — foto depan">
@@ -724,7 +735,6 @@
         </div>
       </article>
 
-      <!-- 03 · Sekretaris 1 -->
       <article class="stu-card reveal" style="--d:.1s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/mZKLpt86/Chat-GPT-Image-Sep-22-2026-06-57-39-PM.png" alt="Yogaswara Priatama Whardhana — foto depan">
@@ -737,7 +747,6 @@
         </div>
       </article>
 
-      <!-- 04 · Sekretaris 2 -->
       <article class="stu-card reveal" style="--d:.15s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/qM4QyWRy/Whats-App-Image-2026-10-16-at-06-09-38.jpg" alt="Ashifa Julia Purnama Suryadi  — foto depan">
@@ -750,7 +759,6 @@
         </div>
       </article>
 
-      <!-- 05 · Bendahara 1 -->
       <article class="stu-card reveal" style="--d:.2s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/ZYyXwk4j/Whats-App-Image-2026-10-16-at-06-24-12.jpg" alt="Nabil Aditya Romansah  — foto depan">
@@ -763,7 +771,6 @@
         </div>
       </article>
 
-      <!-- 06 · Bendahara 2 -->
       <article class="stu-card reveal" style="--d:.25s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/kGG2QzMs/Whats-App-Image-2026-10-15-at-23-16-19.jpg" alt="Dhia Kamila Putri  — foto depan">
@@ -776,7 +783,6 @@
         </div>
       </article>
 
-      <!-- 07 · Sie Acara -->
       <article class="stu-card reveal" style="--d:.1s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/cJtTmkCy/Chat-GPT-Image-Sep-22-2026-07-08-10-PM.png" alt="Muhammad Ihsan Auliya  — foto depan">
@@ -789,7 +795,6 @@
         </div>
       </article>
 
-      <!-- 08 · Sie Dokumentasi -->
       <article class="stu-card reveal" style="--d:.15s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/yYXNJ7yM/image-(2).png" alt="Ceptiana Sopa Ramdani — foto depan">
@@ -802,7 +807,6 @@
         </div>
       </article>
 
-      <!-- 09 ·  -->
       <article class="stu-card reveal" style="--d:.2s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/T30hsTyg/Chat-GPT-Image-Sep-22-2026-02-46-17-PM.png" alt="Muhammad Akhtar Rayyan Surya — foto depan">
@@ -815,7 +819,6 @@
         </div>
       </article>
 
-      <!-- 10 ·  -->
       <article class="stu-card reveal" style="--d:.25s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/Y915XC02/image-(1).png" alt="Alpi Lutpian Almadani  — foto depan">
@@ -828,11 +831,10 @@
         </div>
       </article>
 
-      <!-- 11 ·  -->
       <article class="stu-card reveal" style="--d:.3s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/Wp0NKsCT/image-(3).png" alt="Reihan Azi Firdaus — foto depan">
-          <img class="pb" loading="lazy" src="https://i.pinimg.com/736x/4b/3f/f5/4b3ff5f086a304c1e4d2753f4eb3a2cb.jpg" alt="Reihan Azi Firdaus — foto belakang">
+          <img class="pb" loading="lazy" src="https://i.postimg.cc/nhTNrg88/c420ff5e-8e20-46c9-974b-1017e6c7b343.jpg" alt="Reihan Azi Firdaus — foto belakang">
           <span class="stu-no">11</span>
         </figure>
         <div class="stu-info">
@@ -841,7 +843,6 @@
         </div>
       </article>
 
-      <!-- 12 ·  -->
       <article class="stu-card reveal" style="--d:.35s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/x1ZV8Zh3/image.png" alt="Kirana Ayu — foto depan">
@@ -907,11 +908,20 @@
    PONDOK ASHOKA — SKRIP UTAMA (1 TIPE KAMAR)
    ================================================================ */
 
+/* --- Handler Error Gambar Global --- */
+document.addEventListener('error', e => {
+  const t = e.target;
+  if (t.tagName === 'IMG' && !t.dataset.fbk){
+    t.dataset.fbk = '1';
+    t.src = 'https://placehold.co/720x900/f6f1e6/54635a?text=Foto+sementara+tidak+tersedia';
+  }
+}, true);   // capture: menangkap error img yang dibuat dinamis pun
+
 /* ---------------- DATA — EDIT DI SINI ---------------- */
-const WA_NUMBER = '6285157723358';           // ← nomor WA pengelola (format 62…)
+const WA_NUMBER = '6285157723358';             // ← nomor WA pengelola (format 62…)
 const DISKON    = { 6: 0.10, 12: 0.20 };     // 6 bulan: 10%, 1 tahun: 20%
 
-const ROOM = {                               // ← SATU-SATUNYA tipe kamar
+const ROOM = {                                 // ← SATU-SATUNYA tipe kamar
   nama   : 'Standard',
   meta   : '3 × 3 m · KM dalam',
   tagline: '3 × 3 m · Kamar mandi dalam',
@@ -935,8 +945,8 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g,
 const MQ_ITEMS = ['Kamar mandi dalam','WiFi fiber','Listrik & air termasuk','Dapur bersama',
                   'CCTV 24 jam','Taman & ruang santai','Parkir motor & mobil','Dekat kampus & kuliner'];
 const mqHTML = MQ_ITEMS.map(t => `<span class="m-item"><i data-lucide="leaf"></i>${t}</span>`).join('');
- $('#mq1').innerHTML = mqHTML;
- $('#mq2').innerHTML = mqHTML;
+   $('#mq1').innerHTML = mqHTML;
+   $('#mq2').innerHTML = mqHTML;
 
 /* ---------------- Panel kamar tunggal (tanpa tab kiri) ---------------- */
 const panelEl = $('#roomPanel');
@@ -988,7 +998,7 @@ let dur = 1;
 function updateCalc(){
   const disc  = discFor(dur);
   const total = ROOM.harga * dur * (1 - disc);
-  panelEl.querySelector('.co-dur').textContent   = `(${durLabel(dur)})`;
+  panelEl.querySelector('.co-dur').textContent    = `(${durLabel(dur)})`;
   panelEl.querySelector('.co-total').textContent = fmt(total);
   const saveRow = panelEl.querySelector('.co-save');
   saveRow.hidden = disc === 0;
@@ -1021,7 +1031,7 @@ fDur.addEventListener('change', updEst);
 updEst();
 
 /* ---------------- Formulir cepat → WhatsApp ---------------- */
- $('#formWa').addEventListener('submit', e => {
+   $('#formWa').addEventListener('submit', e => {
   e.preventDefault();
   const nama = $('#fNama').value.trim(), wa = $('#fWa').value.trim();
   const msgEl = $('#formMsg');
@@ -1075,6 +1085,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 const gal = $('#gal');
 let isDown = false, startX = 0, startLeft = 0;
 gal.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'mouse') return;
   isDown = true; startX = e.clientX; startLeft = gal.scrollLeft;
   gal.classList.add('drag');
 });
@@ -1133,7 +1144,7 @@ async function loadReviews(){
 async function loadRating(animate = false){
   const el    = document.getElementById('statRating');
   const label = document.getElementById('statRatingLabel');
-  if (!el) return;                       // elemen tidak ada → abaikan
+  if (!el) return;                           // elemen tidak ada → abaikan
 
   try{
     const d = await (await fetch('/api/stats')).json();
@@ -1150,7 +1161,7 @@ async function loadRating(animate = false){
     
     if (animate){
       el.classList.remove('pop');
-      void el.offsetWidth;               // paksa restart animasi
+      void el.offsetWidth;                   // paksa restart animasi
       el.classList.add('pop');
     }
   }catch{ /* diam — fallback statis */ }
@@ -1223,11 +1234,21 @@ async function renderRevBox(){
 }
 
 /* ---------------- Init ---------------- */
+document.querySelectorAll('.stu-card').forEach(card =>
+  card.addEventListener('click', () => card.classList.toggle('flip')));
 initAuth();
 loadReviews();
-loadRating();                              
+loadRating();                                      
 lucide.createIcons();
- $('#yr').textContent = new Date().getFullYear(); 
+   $('#yr').textContent = new Date().getFullYear(); 
+</script>
+
+<script>
+setTimeout(function(){
+  document.querySelectorAll('.reveal:not(.in)').forEach(function(el){
+    el.classList.add('in');
+  });
+}, 1800);
 </script>
 </body>
 </html>
