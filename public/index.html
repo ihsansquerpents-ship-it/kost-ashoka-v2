@@ -388,11 +388,7 @@
 .stu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:24px}
 .stu-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s,border-color .45s}
 .stu-card:hover{transform:translateY(-8px);border-color:rgba(212,101,31,.5);box-shadow:0 26px 48px -24px rgba(27,42,32,.38)}
-.stu-photo{position:relative;aspect-ratio:3/4;overflow:hidden;margin:0;background:var(--cream-2)}
-.stu-photo::after{content:"";position:absolute;top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);
-  animation:shimmer 1.4s infinite;z-index:0}
-@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.stu-photo{position:relative;aspect-ratio:3/4;overflow:hidden;margin:0}
 .stu-photo img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:opacity .5s ease,filter .5s ease,transform .9s cubic-bezier(.22,.61,.36,1)}
 .stu-photo .pf{opacity:1;filter:grayscale(100%) contrast(1.1);z-index:1}
 .stu-photo .pb{opacity:0;z-index:2}
@@ -428,35 +424,7 @@
 <body>
 
 <div class="grain" aria-hidden="true"></div>
-<script>
-/* ================================================================
-   AUTO-RESIZE: semua foto i.postimg.cc dimuat ulang lewat wsrv.nl
-   → ukuran turun dari 1–5 MB menjadi ±50–150 KB per foto
-   ================================================================ */
-(function(){
-  var fix = function(u){
-    if (!u || u.indexOf('i.postimg.cc') === -1 || u.indexOf('wsrv.nl') !== -1) return null;
-    return 'https://wsrv.nl/?url=' + encodeURIComponent(u) + '&w=800&q=75&output=webp';
-  };
-  var apply = function(scope){
-    (scope || document).querySelectorAll('img').forEach(function(im){
-      var f = fix(im.getAttribute('src'));
-      if (f) im.setAttribute('src', f);
-    });
-  };
-  apply(); // foto yang sudah ada di HTML
 
-  // foto yang dibuat dinamis oleh skrip utama (panel kamar, dsb.)
-  new MutationObserver(function(muts){
-    muts.forEach(function(m){
-      m.addedNodes.forEach(function(n){
-        if (n.tagName === 'IMG'){ var f = fix(n.getAttribute('src')); if (f) n.setAttribute('src', f); }
-        else if (n.querySelectorAll) apply(n);
-      });
-    });
-  }).observe(document.documentElement, {childList:true, subtree:true});
-})();
-</script>
 <!-- ============ HEADER ============ -->
 <header class="hd" id="hd">
   <div class="wrap">
@@ -733,6 +701,7 @@
   </div>
 </section>
 
+<!-- ============ ANGGOTA SISWA — 12 BINGKAI FOTO ============ -->
 <section class="sec" id="anggota">
   <div class="wrap">
     <div class="sec-head reveal">
@@ -743,6 +712,7 @@
 
     <div class="stu-grid">
 
+      <!-- 01 · Mentor  -->
       <article class="stu-card reveal">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/6QNz9QPk/Whats-App-Image-2026-10-16-at-09-27-30.jpg" alt="Hiro Faletehan — foto depan">
@@ -755,6 +725,7 @@
         </div>
       </article>
 
+      <!-- 02 · Wakil Kelas -->
       <article class="stu-card reveal" style="--d:.05s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/ZRygWKp6/Chat-GPT-Image-Sep-22-2026-06-58-39-PM.png" alt="Muhammad Irsyad Virdaus — foto depan">
@@ -767,6 +738,7 @@
         </div>
       </article>
 
+      <!-- 03 · Sekretaris 1 -->
       <article class="stu-card reveal" style="--d:.1s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/mZKLpt86/Chat-GPT-Image-Sep-22-2026-06-57-39-PM.png" alt="Yogaswara Priatama Whardhana — foto depan">
@@ -779,6 +751,7 @@
         </div>
       </article>
 
+      <!-- 04 · Sekretaris 2 -->
       <article class="stu-card reveal" style="--d:.15s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/qM4QyWRy/Whats-App-Image-2026-10-16-at-06-09-38.jpg" alt="Ashifa Julia Purnama Suryadi  — foto depan">
@@ -791,6 +764,7 @@
         </div>
       </article>
 
+      <!-- 05 · Bendahara 1 -->
       <article class="stu-card reveal" style="--d:.2s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/ZYyXwk4j/Whats-App-Image-2026-10-16-at-06-24-12.jpg" alt="Nabil Aditya Romansah  — foto depan">
@@ -803,6 +777,7 @@
         </div>
       </article>
 
+      <!-- 06 · Bendahara 2 -->
       <article class="stu-card reveal" style="--d:.25s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/kGG2QzMs/Whats-App-Image-2026-10-15-at-23-16-19.jpg" alt="Dhia Kamila Putri  — foto depan">
@@ -815,6 +790,7 @@
         </div>
       </article>
 
+      <!-- 07 · Sie Acara -->
       <article class="stu-card reveal" style="--d:.1s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/cJtTmkCy/Chat-GPT-Image-Sep-22-2026-07-08-10-PM.png" alt="Muhammad Ihsan Auliya  — foto depan">
@@ -827,6 +803,7 @@
         </div>
       </article>
 
+      <!-- 08 · Sie Dokumentasi -->
       <article class="stu-card reveal" style="--d:.15s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/yYXNJ7yM/image-(2).png" alt="Ceptiana Sopa Ramdani — foto depan">
@@ -839,6 +816,7 @@
         </div>
       </article>
 
+      <!-- 09 ·  -->
       <article class="stu-card reveal" style="--d:.2s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/T30hsTyg/Chat-GPT-Image-Sep-22-2026-02-46-17-PM.png" alt="Muhammad Akhtar Rayyan Surya — foto depan">
@@ -851,6 +829,7 @@
         </div>
       </article>
 
+      <!-- 10 ·  -->
       <article class="stu-card reveal" style="--d:.25s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/Y915XC02/image-(1).png" alt="Alpi Lutpian Almadani  — foto depan">
@@ -863,10 +842,11 @@
         </div>
       </article>
 
+      <!-- 11 ·  -->
       <article class="stu-card reveal" style="--d:.3s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/Wp0NKsCT/image-(3).png" alt="Reihan Azi Firdaus — foto depan">
-          <img class="pb" loading="lazy" src="https://i.postimg.cc/nhTNrg88/c420ff5e-8e20-46c9-974b-1017e6c7b343.jpg" alt="Reihan Azi Firdaus — foto belakang">
+          <img class="pb" loading="lazy" src="https://i.pinimg.com/736x/4b/3f/f5/4b3ff5f086a304c1e4d2753f4eb3a2cb.jpg" alt="Reihan Azi Firdaus — foto belakang">
           <span class="stu-no">11</span>
         </figure>
         <div class="stu-info">
@@ -875,6 +855,7 @@
         </div>
       </article>
 
+      <!-- 12 ·  -->
       <article class="stu-card reveal" style="--d:.35s">
         <figure class="stu-photo">
           <img class="pf" loading="lazy" src="https://i.postimg.cc/x1ZV8Zh3/image.png" alt="Kirana Ayu — foto depan">
@@ -940,23 +921,8 @@
    PONDOK ASHOKA — SKRIP UTAMA (1 TIPE KAMAR)
    ================================================================ */
 
-
-const IMG_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800">' +
-  '<rect width="100%" height="100%" fill="#eee7d7"/>' +
-  '<text x="300" y="390" text-anchor="middle" font-family="sans-serif" font-size="26" fill="#54635a">Foto tidak dapat dimuat</text>' +
-  '<text x="300" y="425" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#8a978d">Periksa koneksi internet</text>' +
-  '</svg>');
-
-document.addEventListener('error', e => {
-  const t = e.target;
-  if (t.tagName === 'IMG' && !t.dataset.fbk){
-    t.dataset.fbk = '1';
-    t.src = IMG_FALLBACK;
-  }
-}, true);
 /* ---------------- DATA — EDIT DI SINI ---------------- */
-const WA_NUMBER = '6285157723358';              // ← nomor WA pengelola (format 62…)
+const WA_NUMBER = '6285157723358';             // ← nomor WA pengelola (format 62…)
 const DISKON    = { 6: 0.10, 12: 0.20 };     // 6 bulan: 10%, 1 tahun: 20%
 
 const ROOM = {                                 // ← SATU-SATUNYA tipe kamar
@@ -1123,7 +1089,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 const gal = $('#gal');
 let isDown = false, startX = 0, startLeft = 0;
 gal.addEventListener('pointerdown', e => {
-  if (e.pointerType !== 'mouse') return;
   isDown = true; startX = e.clientX; startLeft = gal.scrollLeft;
   gal.classList.add('drag');
 });
